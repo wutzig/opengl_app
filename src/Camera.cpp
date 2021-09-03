@@ -1,5 +1,5 @@
-#include "header.h"
-
+#include "Camera.hpp"
+#include "Renderer.hpp"
 
 Camera::Camera():
 position(glm::vec3(0.0f, 0.0f, -1.0f)), right(glm::vec3(1.0f, 0.0f, 0.0f)), lookat(glm::vec3(0.0f)){

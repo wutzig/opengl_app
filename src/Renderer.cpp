@@ -1,5 +1,11 @@
-#include "header.h"
-
+#include "Renderer.hpp"
+#include <iostream>
+#include "../include/glm/glm.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "../include/glm/gtx/transform.hpp"
+#include "../include/GLFW/glfw3.h"
+#include "Model.hpp"
+#include "Entity.hpp"
 Renderer::Renderer(float width, float height):
     width(width), height(height){
 
@@ -19,7 +25,6 @@ Renderer::Renderer(float width, float height):
             }
         }
     }
-
     {//Upload Terrain to OpenGL
         glCreateVertexArrays(1, &this->terrainVertexArrayID);
         glBindVertexArray(this->terrainVertexArrayID);
@@ -35,9 +40,8 @@ Renderer::Renderer(float width, float height):
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->terrain_colors.size(), &(this->terrain_colors[0]), GL_STATIC_DRAW);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-        glBindVertexArray(NULL);
+        glBindVertexArray(0);
     }
-
     std::vector<float> cube_normals;
     cube_normals.reserve(12 * 6);
     std::vector<float> brown;
@@ -77,7 +81,6 @@ Renderer::Renderer(float width, float height):
     tree_colors.reserve(2 * 12 * 6);
     tree_colors.insert(tree_colors.end(), brown.begin(), brown.end());
     tree_colors.insert(tree_colors.end(), green.begin(), green.end());
-
     //make the player
     this->dynamicModels.emplace_back(6, &cube_vertices[0], &cube_normals[0], &blue[0]);
     this->dynamicModels[0].entities.emplace_back(glm::vec3(NUM_GRID / 2 * TILE_SIZE, 0.0f, NUM_GRID / 2 * TILE_SIZE));
@@ -102,8 +105,9 @@ Renderer::Renderer(float width, float height):
             }
         }
     }
-
+    std::cout << "NOW\n";
     this->staticModels.emplace_back(12, &tree_vertices[0], &tree_normals[0], &tree_colors[0], NUM_TREES, positions, angles);
+    std::cout << "NOW\n";
 
     {//Create GUI
         this->gui_vertices = {-0.9f, 0.6f, 0.0f,
@@ -118,7 +122,7 @@ Renderer::Renderer(float width, float height):
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, &this->gui_vertices[0], GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-        glBindVertexArray(NULL);
+        glBindVertexArray(0);
     }
     float center = float(NUM_GRID * TILE_SIZE) / 2.0f;
     glm::vec3 lookat = { center, 0.0f, center };
@@ -257,7 +261,7 @@ void Renderer::DrawScene(uint terrainShaderProgramID, uint staticShaderProgramID
         model.Unbind();
     }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, NULL);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, this->width, this->height);
     glBindTexture(GL_TEXTURE_2D, this->depthTextureID);
     glCullFace(GL_BACK);
@@ -296,8 +300,8 @@ void Renderer::DrawScene(uint terrainShaderProgramID, uint staticShaderProgramID
         }
         model.Unbind();
     }
-    glBindVertexArray(NULL);
-    glUseProgram(NULL);
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
 
 void Renderer::RenderTerrain(){
@@ -309,7 +313,7 @@ void Renderer::RenderTerrain(){
     
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
-    glBindVertexArray(NULL);
+    glBindVertexArray(0);
 }
 void Renderer::InitShadowMap(){
     glGenFramebuffers(1, &this->frameBufferID);
@@ -333,7 +337,7 @@ void Renderer::InitShadowMap(){
         glDeleteBuffers(1, &this->frameBufferID);
         return;
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, NULL);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 void Renderer::GetUniformLocations(uint terrainShaderProgramID, 
                                    uint staticShaderProgramID, uint dynamicShaderProgramID, 

@@ -1,5 +1,5 @@
-#include "header.h"
-
+#include "Model.hpp"
+#include "../include/GL/glew.h"
 bool Model::operator==(const Model& other){
     return this->vertexArrayID == other.vertexArrayID;
 }
@@ -7,13 +7,13 @@ Model::Model():
 numQuads(0), vertices(nullptr), normals(nullptr), colors(nullptr){
     
 }
-Model::Model(const uint& numQuads, float *vertices, float *normals, float *colors):
+Model::Model(const int& numQuads, float *vertices, float *normals, float *colors):
     numQuads(numQuads), vertices(vertices), normals(normals), colors(colors){
     
     glCreateVertexArrays(1, &this->vertexArrayID);
     glBindVertexArray(this->vertexArrayID);
 
-    uint buffer = 0;
+    GLuint buffer = 0;
     glCreateBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 * this->numQuads, this->vertices, GL_STATIC_DRAW);
@@ -32,7 +32,7 @@ Model::Model(const uint& numQuads, float *vertices, float *normals, float *color
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-    glBindVertexArray(NULL);
+    glBindVertexArray(0);
 }
 
 void Model::Bind(){
@@ -51,5 +51,5 @@ void Model::Unbind(){
     glDisableVertexAttribArray(3);
     glDisableVertexAttribArray(4);
 
-    glBindVertexArray(NULL);
+    glBindVertexArray(0);
 }

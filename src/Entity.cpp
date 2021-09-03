@@ -1,12 +1,14 @@
-#include "header.h"
-
+#include "Entity.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "../include/glm/gtx/transform.hpp" 
+#include "App.hpp"
 Entity::Entity(glm::vec3 position, float rotationY){
     this->transformationMatrix = glm::mat4(1.0f);
     this->SetPosition(position);
     this->path = {this->tileIndex, this->tileIndex};
     this->SetRotation(rotationY);
 }
-void Entity::ChangePosition(double delta_time, const std::unordered_set<uint>* blockedTiles){
+void Entity::ChangePosition(double delta_time, const std::unordered_set<int>* blockedTiles){
 // move the entity towards its goal, depending on the time that passed
 // check before each step if the next tile is blocked
 // if it is, do something...

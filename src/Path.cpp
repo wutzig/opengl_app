@@ -1,7 +1,7 @@
-#include "header.h"
-Path::Path():
-startIndex(0), goalIndex(0){
-}
+#include "Path.hpp"
+#include "../include/glm/glm.hpp"
+Path::Path(): startIndex(0), goalIndex(0){}
+
 Path::Path(glm::ivec2 startIndex, glm::ivec2 goalIndex):
 startIndex(startIndex), goalIndex(goalIndex){
 

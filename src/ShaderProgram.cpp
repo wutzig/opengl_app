@@ -1,4 +1,7 @@
-#include "header.h"
+#include "ShaderProgram.hpp"
+#include <iostream>
+#include <fstream>
+#include "../include/GL/glew.h"
 ShaderProgram::ShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath){
     this->programID = glCreateProgram();
     this->vertexShaderID = LoadShader(vertexShaderPath, GL_VERTEX_SHADER);
@@ -50,16 +53,17 @@ void ShaderProgram::DeleteProgram(){
     glDeleteShader(this->geometryShaderID);
 
     glDeleteProgram(this->programID);
-    glUseProgram(NULL);
+    glUseProgram(0);
 }
-uint ShaderProgram::LoadShader(const char* path, uint type){
+GLuint ShaderProgram::LoadShader(const char* file_path, GLuint type){
     std::string shaderString;
-    std::ifstream sourceFile( path );
-    
+    std::ifstream sourceFile( file_path );
+    std::cout << "source " << file_path << '\n';
     if( sourceFile ){
         shaderString.assign( ( std::istreambuf_iterator< char >( sourceFile ) ), std::istreambuf_iterator< char >() );
     }
     const char* source = shaderString.c_str();
+    
     uint shaderID = glCreateShader(type);
     glShaderSource(shaderID, 1, &source, NULL);
     glCompileShader(shaderID);
