@@ -30,7 +30,7 @@ int StaticModel::GetNumInstances(){
 void StaticModel::CreateInstanceBuffer(GLuint index){
     GLuint buffer = 0;
     glBindVertexArray(this->vertexArrayID);
-    glCreateBuffers(index, &buffer);
+    glCreateBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, this->numInstances * sizeof(glm::mat4), &this->instanceMatrices[0], GL_STATIC_DRAW);
     for(int j = 0; j < 4; j++){
